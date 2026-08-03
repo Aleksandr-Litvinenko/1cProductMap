@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Aleksandr-Litvinenko/1cProductMap/schemas/card.schema.json",
+  "title": "Карточка продукта 1С",
+  "description": "Схема одного объекта из массива ITEMS. Описание полей — docs/card-structure.md",
+
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": ["r", "k", "id", "c", "f", "min", "max", "w", "simple", "d", "g", "b", "dep", "its", "st"],
+
+  "properties": {
+    "r": {
+      "description": "Этаж",
+      "type": "string",
+      "enum": ["conf", "govconf", "serv", "tech", "host"]
+    },
+    "k": {
+      "description": "Задачи через запятую без пробелов, либо all",
+      "type": "string",
+      "pattern": "^(all|(acc|trade|hr|mfg|doc|group|gov)(,(acc|trade|hr|mfg|doc|group|gov))*)$"
+    },
+    "id": {
+      "description": "Уникальный код карточки. Не меняется после публикации",
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "minLength": 2,
+      "maxLength": 24
+    },
+    "c": {
+      "description": "Короткое название на карточке, 1-3 слова",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 40
+    },
+    "f": {
+      "description": "Подзаголовок одной строкой, без точки в конце",
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 60,
+      "not": { "pattern": "\\.$" }
+    },
+    "min": {
+      "description": "Нижняя граница размера компании в людях",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "max": {
+      "description": "Верхняя граница размера компании в людях",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "w": {
+      "description": "Кому это нужно — одно предложение",
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 200
+    },
+    "simple": {
+      "description": "«Простыми словами» — главный текст карточки, 2-4 предложения",
+      "type": "string",
+      "minLength": 40,
+      "maxLength": 700
+    },
+    "d": {
+      "description": "Подробное описание для страницы продукта, 1-3 предложения",
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 700
+    },
+    "g": {
+      "description": "«Берите, если» — ситуации клиента, 1-4 пункта",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": { "type": "string", "minLength": 3, "maxLength": 120 }
+    },
+    "b": {
+      "description": "«Не берите, если» — 1-3 пункта, обязателен хотя бы один",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "type": "string", "minLength": 3, "maxLength": 160 }
+    },
+    "dep": {
+      "description": "Как поставляется",
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 60
+    },
+    "its": {
+      "description": "Входит ли в ИТС",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 40
+    },
+    "st": {
+      "description": "Статус продукта",
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 60
+    },
+
+    "ed": {
+      "description": "Редакции продукта. Заводятся внутри карточки, а не отдельными карточками",
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/definitions/edition" }
+    },
+    "partner": {
+      "description": "Разработчик, если это не фирма «1С»",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 60
+    },
+    "note": {
+      "description": "Уточняющая сноска на странице продукта",
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 400
+    },
+    "cv": {
+      "description": "Цвет карточки вручную. Для нейтральных этажей — ck",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8
+    },
+    "legacy": {
+      "description": "Снят с продажи — название зачёркивается",
+      "const": 1
+    }
+  },
+
+  "definitions": {
+    "edition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["n", "sc", "t", "d", "y", "n2"],
+      "properties": {
+        "n": {
+          "description": "Название редакции: базовая, ПРОФ, КОРП",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40
+        },
+        "sc": {
+          "description": "Размер компании для редакции",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40
+        },
+        "t": {
+          "description": "Что закрывает редакция, одной строкой",
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 120
+        },
+        "d": {
+          "description": "Абзац описания редакции",
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 700
+        },
+        "y": {
+          "description": "Берите, если",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": { "type": "string", "minLength": 3, "maxLength": 120 }
+        },
+        "n2": {
+          "description": "Не берите, если",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "type": "string", "minLength": 3, "maxLength": 160 }
+        }
+      }
+    }
+  }
+}

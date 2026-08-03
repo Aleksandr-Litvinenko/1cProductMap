@@ -93,7 +93,19 @@
 | [`docs/card-structure.md`](docs/card-structure.md) | **Структура карточки — как всё заполняется.** Основной документ для наполнения |
 | [`docs/content-guide.md`](docs/content-guide.md) | Как писать тексты карточек |
 | [`docs/catalog.md`](docs/catalog.md) | Текущий каталог: что уже заведено |
+| [`docs/validation.md`](docs/validation.md) | Автопроверка карточек перед публикацией |
 | [`examples/card.json`](examples/card.json) | Пример заполненной карточки |
+| [`schemas/card.schema.json`](schemas/card.schema.json) | JSON Schema карточки — для подсказок в редакторе |
+
+Проверить карточки перед публикацией:
+
+```bash
+python3 scripts/validate_cards.py examples/card.json
+```
+
+Скрипт проходит весь список самопроверки: обязательные поля, коды этажей и задач,
+границы размера компании, уникальность `id` и ссылки из `FULL` и `COMPOSITE`.
+Зависимостей нет, нужен только Python 3.8+.
 
 ---
 
